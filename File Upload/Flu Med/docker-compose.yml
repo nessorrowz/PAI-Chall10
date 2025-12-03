@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  vuln-upload:
+    build: .
+    ports:
+      - "6002:80"
