@@ -8,4 +8,6 @@ RUN mkdir /var/www/html/uploads && chmod 777 /var/www/html/uploads
 COPY index.php /var/www/html/index.php
 COPY upload.php /var/www/html/upload.php
 COPY flag.txt /var/www/html/flag.txt
+COPY reset.sh /usr/local/bin/reset.sh
+RUN chmod +x /usr/local/bin/reset.sh
 RUN mv /var/www/html/flag.txt /`head -c 16 /dev/urandom | xxd -p`.txt
