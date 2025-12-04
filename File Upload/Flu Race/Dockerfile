@@ -52,6 +52,10 @@ COPY flag.txt /flag.txt
 # Copy YARA rules
 COPY virus_rules.yar /etc/yara/rules/
 
+# Copy reset script
+COPY reset.sh /usr/local/bin/reset.sh
+RUN chmod +x /usr/local/bin/reset.sh
+
 # Set proper permissions
 RUN chmod 644 /flag.txt \
     && chmod 644 /etc/yara/rules/virus_rules.yar \
