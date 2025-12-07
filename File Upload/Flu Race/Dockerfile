@@ -56,6 +56,14 @@ COPY virus_rules.yar /etc/yara/rules/
 COPY reset.sh /usr/local/bin/reset.sh
 RUN chmod +x /usr/local/bin/reset.sh
 
+# Copy scanning script
+COPY scan_and_cleanup.sh /usr/local/bin/scan_and_cleanup.sh
+RUN chmod +x /usr/local/bin/scan_and_cleanup.sh
+
+# Copy startup script
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 # Set proper permissions
 RUN chmod 644 /flag.txt \
     && chmod 644 /etc/yara/rules/virus_rules.yar \
@@ -71,3 +79,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/ || exit 1
 
 EXPOSE 80
+
+# Start both Apache and YARA scanner
+CMD ["/usr/local/bin/start.sh"]
