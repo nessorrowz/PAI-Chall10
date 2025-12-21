@@ -314,7 +314,6 @@
         <div class="header">
             <div class="header-content">
                 <h1><span class="emoji">🤧</span> Hachuu <span class="emoji">💨</span></h1>
-                <p>Secure File Upload Service</p>
             </div>
         </div>
         
@@ -343,16 +342,6 @@
             <div class="security-badge">
                 <span>🦠</span>
                 <span>Protected by Advanced Virus Scanning</span>
-            </div>
-            
-            <div class="info-card">
-                <h4>📋 Upload Guidelines</h4>
-                <ul class="info-list">
-                    <li>Maximum file size: 1MB</li>
-                    <li>Real-time malware detection</li>
-                    <li>Automatic content validation</li>
-                    <li>SHA256 integrity checking</li>
-                </ul>
             </div>
         </div>
     </div>
