@@ -21,6 +21,7 @@ while true; do
         done
     fi
     
-    # Wait 0.5 seconds before next scan (very aggressive cleanup)
-    sleep 0.5
+    # Wait 0.05 seconds before next scan (extremely aggressive cleanup)
+    # This creates a ~50ms window requiring proper race condition exploitation
+    sleep 0.05
 done

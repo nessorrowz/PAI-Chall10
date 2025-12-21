@@ -47,7 +47,11 @@ if (isset($_POST["submit"])) {
     
     $uploadDir = "uploads/";
     $fileName = basename($_FILES["imageFile"]["name"]);
-    $uploadPath = $uploadDir . $fileName;
+    
+    // Add random prefix to make filename unpredictable
+    $randomPrefix = bin2hex(random_bytes(4)); // 8 hex chars
+    $uploadPath = $uploadDir . $randomPrefix . "_" . $fileName;
+    
     $fileType = strtolower(pathinfo($uploadPath, PATHINFO_EXTENSION));
     $checksumPath = $uploadPath . '.txt';
 
@@ -59,7 +63,8 @@ if (isset($_POST["submit"])) {
         // Store hash for tracking
         file_put_contents($checksumPath, $hash);
         
-        $message = "Success: File uploaded.";
+        // Return actual filename so scripts can parse it
+        $message = "Success: File uploaded as " . basename($uploadPath);
 
     } else {
         $message = "Error: There was a problem with the upload.";
