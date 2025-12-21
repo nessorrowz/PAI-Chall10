@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FLU RACE - File Upload Challenge</title>
+    <title>Hachuu - File Upload Service</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -14,13 +14,28 @@
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: #000000;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             color: #333;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
         
         .container {
@@ -28,9 +43,11 @@
             width: 100%;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 60px rgba(147, 51, 234, 0.3);
             overflow: hidden;
             animation: fadeIn 0.5s ease-out;
+            position: relative;
+            z-index: 1;
         }
         
         @keyframes fadeIn {
@@ -43,9 +60,7 @@
                 transform: translateY(0);
             }
         }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        9333ea 0%, #7c3aed 100%);
             color: white;
             padding: 40px 30px;
             text-align: center;
@@ -60,7 +75,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
             animation: pulse 15s infinite;
         }
         
@@ -77,6 +92,20 @@
         .header h1 {
             font-size: 2.8em;
             font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        
+        .header .emoji {
+            font-size: 1.2em;
+            margin: 0 5px;
+            display: inline-block;
+            animation: sneeze 2s infinite;
+        }
+        
+        @keyframes sneeze {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2) rotate(10deg); }
             margin-bottom: 10px;
             letter-spacing: -1px;
         }
@@ -136,10 +165,10 @@
         }
         
         .upload-section:hover {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-color: #9333ea;
+            background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
         }
         
         .upload-icon {
@@ -166,8 +195,8 @@
         }
         
         .file-label {
-            display: inline-block;
-            padding: 12px 28px;
+            display: inli9333ea;
+            border-color: #9333
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
@@ -175,21 +204,21 @@
             transition: all 0.3s ease;
             font-weight: 500;
             color: #4a5568;
-        }
-        
-        .file-label:hover {
-            background: #667eea;
-            border-color: #667eea;
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .upload-btn {
-            width: 100%;
-            margin-top: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }9333ea 0%, #7c3aed 100%);
             color: white;
             border: none;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(147, 51
             padding: 16px;
             border-radius: 12px;
             font-size: 1.05em;
@@ -255,13 +284,13 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            background: linear-gradient(135deg, #fae8ff 0%, #e9d5ff 100%);
             padding: 12px 20px;
             border-radius: 10px;
             margin-top: 25px;
             font-weight: 600;
-            color: #2d3748;
-            box-shadow: 0 2px 8px rgba(253, 203, 110, 0.3);
+            color: #6b21a8;
+            box-shadow: 0 2px 8px rgba(147, 51, 234, 0.2);
         }
         
         .filename-display {
@@ -284,8 +313,8 @@
     <div class="container">
         <div class="header">
             <div class="header-content">
-                <h1>🏁 FLU RACE</h1>
-                <p>File Upload Racing Challenge</p>
+                <h1><span class="emoji">🤧</span> Hachuu <span class="emoji">💨</span></h1>
+                <p>Secure File Upload Service</p>
             </div>
         </div>
         
@@ -312,8 +341,8 @@
             </form>
             
             <div class="security-badge">
-                <span>🛡️</span>
-                <span>Protected by Advanced YARA Scanning</span>
+                <span>🦠</span>
+                <span>Protected by Advanced Virus Scanning</span>
             </div>
             
             <div class="info-card">
