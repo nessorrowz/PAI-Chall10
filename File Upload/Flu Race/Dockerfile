@@ -1,6 +1,6 @@
 FROM php:8.1-apache
 
-# Install system dependencies
+# Install system dependencies including YARA
 RUN apt-get update && apt-get install -y \
     wget \
     build-essential \
@@ -12,9 +12,11 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libjansson-dev \
     libmagic-dev \
+    curl \
+    dos2unix \
     && rm -rf /var/lib/apt/lists/*
 
-# Install YARA
+# Install YARA from source
 RUN wget https://github.com/VirusTotal/yara/archive/v4.3.2.tar.gz \
     && tar -xzf v4.3.2.tar.gz \
     && cd yara-4.3.2 \
@@ -26,16 +28,13 @@ RUN wget https://github.com/VirusTotal/yara/archive/v4.3.2.tar.gz \
     && cd .. \
     && rm -rf yara-4.3.2 v4.3.2.tar.gz
 
-# Create directories for YARA rules and uploads
-RUN mkdir -p /etc/yara/rules \
-    && mkdir -p /var/www/html/uploads \
-    && chown -R www-data:www-data /var/www/html/uploads \
-    && chmod 755 /var/www/html/uploads
+# Create necessary directories
+RUN mkdir -p /etc/yara/rules /var/www/html/uploads
 
 # Enable Apache modules
 RUN a2enmod rewrite
 
-# Set upload limits
+# Set PHP upload limits
 RUN echo "upload_max_filesize = 1M" >> /usr/local/etc/php/php.ini \
     && echo "post_max_size = 2M" >> /usr/local/etc/php/php.ini \
     && echo "max_execution_time = 30" >> /usr/local/etc/php/php.ini \
@@ -52,27 +51,18 @@ COPY flag.txt /flag.txt
 # Copy YARA rules
 COPY virus_rules.yar /etc/yara/rules/
 
-# Copy reset script
-COPY reset.sh /usr/local/bin/reset.sh
-RUN chmod +x /usr/local/bin/reset.sh
-
-# Copy scanning script
+# Copy scripts and fix line endings
 COPY scan_and_cleanup.sh /usr/local/bin/scan_and_cleanup.sh
-RUN chmod +x /usr/local/bin/scan_and_cleanup.sh
-
-# Copy startup script
 COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
+RUN dos2unix /usr/local/bin/scan_and_cleanup.sh /usr/local/bin/start.sh && \
+    chmod +x /usr/local/bin/scan_and_cleanup.sh /usr/local/bin/start.sh
 
 # Set proper permissions
 RUN chmod 644 /flag.txt \
     && chmod 644 /etc/yara/rules/virus_rules.yar \
-    && chown -R www-data:www-data /var/www/html
-
-# Create uploads directory with proper permissions
-RUN mkdir -p /var/www/html/uploads \
+    && chown -R www-data:www-data /var/www/html \
     && chown www-data:www-data /var/www/html/uploads \
-    && chmod 755 /var/www/html/uploads
+    && chmod 777 /var/www/html/uploads
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
@@ -80,5 +70,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 EXPOSE 80
 
-# Start both Apache and YARA scanner
+# Start services using our start script
 CMD ["/usr/local/bin/start.sh"]

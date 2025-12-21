@@ -1,4 +1,30 @@
 <?php
+session_start();
+
+// Rate limiting: max 10 uploads per 5 seconds
+$rate_limit_window = 5; // seconds
+$max_uploads = 10;
+
+if (!isset($_SESSION['upload_times'])) {
+    $_SESSION['upload_times'] = [];
+}
+
+// Clean old timestamps
+$current_time = time();
+$_SESSION['upload_times'] = array_filter($_SESSION['upload_times'], function($timestamp) use ($current_time, $rate_limit_window) {
+    return ($current_time - $timestamp) < $rate_limit_window;
+});
+
+// Check rate limit
+if (count($_SESSION['upload_times']) >= $max_uploads) {
+    header("Location: index.php?message=" . urlencode("Error: Too many upload attempts. Please slow down."));
+    exit();
+}
+
+$_SESSION['upload_times'][] = $current_time;
+
+// Add random delay to make manual timing impossible
+usleep(rand(100000, 500000)); // 0.1 to 0.5 seconds random delay
 
 if (isset($_POST["submit"])) {
 
@@ -27,25 +53,13 @@ if (isset($_POST["submit"])) {
 
     if (move_uploaded_file($_FILES["imageFile"]["tmp_name"], $uploadPath)) {
 
-        // check virus
-        $escapedPath = escapeshellarg($uploadPath);
-        $rulesPath = '/etc/yara/rules/virus_rules.yar';
-        $command = "yara " . $rulesPath . " " . $escapedPath;
-        exec($command, $output, $returnCode);
-
         $content = file_get_contents($uploadPath);
         $hash = hash('sha256', $content);
 
-        $isImage = getimagesize($uploadPath);
-        $allowedTypes = array('jpg', 'jpeg', 'png');
-
-        if (($isImage === false || !in_array($fileType, $allowedTypes)) && !$output[0]) {
-            unlink($uploadPath);
-            $message = "Error: Invalid file type.";
-        } else{
-            file_put_contents($checksumPath, $hash);
-            $message = "Success: File uploaded.";
-        }
+        // Store hash for tracking
+        file_put_contents($checksumPath, $hash);
+        
+        $message = "Success: File uploaded.";
 
     } else {
         $message = "Error: There was a problem with the upload.";

@@ -4,4 +4,4 @@
 /usr/local/bin/scan_and_cleanup.sh &
 
 # Start Apache in foreground
-apache2ctl -D FOREGROUND
+apache2-foreground

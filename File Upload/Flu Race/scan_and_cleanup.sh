@@ -21,6 +21,6 @@ while true; do
         done
     fi
     
-    # Wait 30 seconds before next scan
-    sleep 30
+    # Wait 0.5 seconds before next scan (very aggressive cleanup)
+    sleep 0.5
 done

@@ -7,8 +7,8 @@ FLU RACE is a cybersecurity challenge that demonstrates a **race condition vulne
 
 ### The Race Condition Flow:
 1. **Upload** → File is uploaded to the server ✅
-2. **Delay** → Brief processing delay (usleep in code)
-3. **Scan** → YARA antivirus rules are executed
+2. **Random Delay** → Random processing delay (0.1-0.5s) to prevent predictable timing
+3. **Scan** → YARA antivirus scans every 0.5 seconds
 4. **Validate** → File type and content validation
 5. **Delete** → Malicious files are removed ❌
 
@@ -18,6 +18,12 @@ Between steps 1 and 5, there's a **critical time window** where:
 - The file can be accessed via HTTP requests
 - PHP code can be executed before deletion
 - This creates a **race condition** opportunity
+
+**Challenge Hardening**: 
+- ⚡ **Aggressive scanning**: YARA scans every 0.5 seconds (not 30s)
+- 🎲 **Random delays**: 100-500ms random delays prevent manual timing
+- 🚦 **Rate limiting**: Max 10 uploads per 5 seconds prevents spam
+- 📜 **Scripting required**: Manual timing is nearly impossible
 
 ## 📁 Challenge Structure
 
